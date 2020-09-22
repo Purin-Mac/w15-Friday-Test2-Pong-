@@ -6,12 +6,15 @@ void setup(){
   background(0);
   size(1000, 1000);
   game = new GamePong();
+  pongBall = new Pong();
 }
 
 void draw(){
   background(0);
   game.display();
+  pongBall.draw();
 }
+
 class GamePong{
   int scoreP1, scoreP2; //score of each player
   float positionX, positionY, size; //position and size of center line
@@ -51,9 +54,15 @@ class Pong{
   float positionX, positionY, speedX, speedY, size; //position, size and speed of ball
   
   Pong(){ //constructor
+    positionX = width/2;
+    positionY = height/2;
+    speedX = 10;
+    speedY = 10;
+    size = 50;
   }
   
   void draw(){ //draw ball
+    circle(positionX, positionY, size);
   }
   
   void move(){ //move ball
