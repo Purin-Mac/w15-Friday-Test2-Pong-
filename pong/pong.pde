@@ -1,11 +1,35 @@
+GamePong game;
+Pong  pongBall;
+Paddle paddle1, paddle2;
+
+void setup(){
+  background(0);
+  size(1000, 1000);
+  game = new GamePong();
+}
+
+void draw(){
+  background(0);
+  game.display();
+}
 class GamePong{
   int scoreP1, scoreP2; //score of each player
   float positionX, positionY, size; //position and size of center line
   
   GamePong(){ //constructor
+    scoreP1 = 0;
+    scoreP2 = 0;
+    size = 10;
+    positionX = width/2 - size/2;
+    positionY = 0;
   }
   
   void display(){ //show score and center line
+    fill(255);
+    rect(positionX, positionY, size, height);
+    textSize(50);
+    text(scoreP1, width/4, 50);
+    text(scoreP2, width*3/4, 50);
   }
   
   int getScoreP1(){ //get player1 score
