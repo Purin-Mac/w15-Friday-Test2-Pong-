@@ -7,8 +7,8 @@ void setup(){
   size(1000, 800);
   game = new GamePong();
   pongBall = new Pong();
-  paddle1 = new Paddle(0, 20);
-  paddle2 = new Paddle(width-20, 20);
+  paddle1 = new Paddle(0, 30);
+  paddle2 = new Paddle(width-30, 30);
 }
 
 void draw(){
@@ -19,6 +19,10 @@ void draw(){
   pongBall.bounce(pongBall.getX(), pongBall.getY());
   paddle1.draw();
   paddle2.draw();
+  pongBall.setSpeedX(paddle1.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
+  pongBall.setSpeedX(paddle2.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
+  pongBall.setSpeedY(paddle1.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
+  pongBall.setSpeedY(paddle2.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
 }
 
 void mouseDragged(){
@@ -85,7 +89,7 @@ class Pong{
     else{
       speedX = 5;
     }
-    speedY = random(-3, 3);
+    speedY = 0;
     size = 50;
   }
   
@@ -100,10 +104,16 @@ class Pong{
   
   void bounce(float x, float y){ //bounce ball when hit wall
     if(x+size/2 > width){ //right over window
-      speedX = -speedX;
+      positionX = width/2;
+      positionY = height/2;
+      speedX = -5;
+      speedY = random(-3, 3);
     }
     if(x-size/2 < 0){ //left over window
-      speedX = -speedX;
+      positionX = width/2;
+      positionY = height/2;
+      speedX = 5;
+      speedY = random(-3, 3);
     }
     if(y+size/2 > height){ //bottom over window
       speedY = -speedY;
@@ -119,6 +129,18 @@ class Pong{
   
   float getY(){ //get position y of ball
     return positionY;
+  }
+  
+  float getSize(){
+    return size;
+  }
+  
+  float getSpeedX(){
+    return speedX;
+  }
+  
+  float getSpeedY(){
+    return speedY;
   }
   
   void setSpeedX(float speed){ //set speed x of ball
@@ -158,7 +180,74 @@ class Paddle{
     }
   }
   
-  void hit(float ballX, float ballY){ //paddle hit ball
+  float hit(float ballX, float ballY, float size, float ballSpeed){ //paddle hit ball
+    if((ballY+size/2 > positionY && (ballX-size/2 < positionX+wide && ballX-size/2 > positionX)) && 
+       (ballY-size/2 < positionY+high && (ballX-size/2 < positionX+wide && ballX-size/2 > positionX))){
+      if(ballSpeed < 0 && ballSpeed >= -15){
+        ballSpeed = -ballSpeed+1;
+      }
+      else if(ballSpeed > 0 && ballSpeed <= 15){
+        ballSpeed = -ballSpeed-1;
+      }
+      else{
+        ballSpeed = -ballSpeed;
+      }
+    }
+    else if((ballY+size/2 > positionY && (ballX+size/2 < positionX+wide && ballX+size/2 > positionX)) && 
+            (ballY-size/2 < positionY+high && (ballX+size/2 < positionX+wide && ballX+size/2 > positionX))){
+      if(ballSpeed < 0 && ballSpeed >= -15){
+        ballSpeed = -ballSpeed+1;
+      }
+      else if(ballSpeed > 0 && ballSpeed <= 15){
+        ballSpeed = -ballSpeed-1;
+      }
+      else{
+        ballSpeed = -ballSpeed;
+      }
+    }
+    return ballSpeed;
+  }
+  
+  float bounce(float ballX, float ballY, float size, float ballSpeed){ //paddle hit ball
+    if((ballY+size/2 > positionY && (ballX-size/2 < positionX+wide && ballX-size/2 > positionX)) && 
+       (ballY-size/2 < positionY+high && (ballX-size/2 < positionX+wide && ballX-size/2 > positionX))){
+      if(ballSpeed < 0){
+        if(ballY < positionY+high/2){
+          ballSpeed = map(ballY, positionY, positionY+high/2, -3, 0);
+        }
+        else{
+          ballSpeed = map(ballY, positionY+high/2, positionY+high, 0, -3);
+        }
+      }
+      else{
+        if(ballY+size/2 < positionY+high/2){
+          ballSpeed = map(ballY, positionY, positionY+high/2, 3, 0);
+        }
+        else{
+          ballSpeed = map(ballY, positionY+high/2, positionY+high, 0, 3);
+        }
+      }
+    }
+    else if((ballY+size/2 > positionY && (ballX+size/2 < positionX+wide && ballX+size/2 > positionX)) && 
+            (ballY-size/2 < positionY+high && (ballX+size/2 < positionX+wide && ballX+size/2 > positionX))){
+      if(ballSpeed < 0){
+        if(ballY < positionY+high/2){
+          ballSpeed = map(ballY, positionY, positionY+high/2, -3, 0);
+        }
+        else{
+          ballSpeed = map(ballY, positionY+high/2, positionY+high, 0, -3);
+        }
+      }
+      else{
+        if(ballY+size/2 < positionY+high/2){
+          ballSpeed = map(ballY, positionY, positionY+high/2, 3, 0);
+        }
+        else{
+          ballSpeed = map(ballY, positionY+high/2, positionY+high, 0, 3);
+        }
+      }
+    }
+    return ballSpeed;
   }
   
   float getX(){ //get position x of paddle
