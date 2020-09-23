@@ -7,6 +7,8 @@ void setup(){
   size(1000, 800);
   game = new GamePong();
   pongBall = new Pong();
+  paddle1 = new Paddle(0, 20);
+  paddle2 = new Paddle(width-20, 20);
 }
 
 void draw(){
@@ -15,6 +17,17 @@ void draw(){
   pongBall.draw();
   pongBall.move();
   pongBall.bounce(pongBall.getX(), pongBall.getY());
+  paddle1.draw();
+  paddle2.draw();
+}
+
+void mouseDragged(){
+  if(mouseX < game.getPositionX()){
+    paddle1.move(mouseX, mouseY);
+  }
+  else if(mouseX > game.getPositionX()){
+    paddle2.move(mouseX, mouseY);
+  }
 }
 
 class GamePong{
@@ -43,6 +56,14 @@ class GamePong{
   
   int getScoreP2(){ //get player1 score
     return scoreP2;
+  }
+  
+  float getPositionX(){
+    return positionX;
+  }
+  
+  float getPositionY(){
+    return positionY;
   }
   
   void setScoreP1(){ //set player1 score
@@ -100,23 +121,41 @@ class Pong{
     return positionY;
   }
   
-  void setSpeedX(){ //set speed x of ball
+  void setSpeedX(float speed){ //set speed x of ball
+    speedX = speed;
   }
   
-  void setSpeedY(){ //set speed y of ball
+  void setSpeedY(float speed){ //set speed y of ball
+    speedY = speed;
   }
 }
 
 class Paddle{
   float positionX, positionY, wide, high, speedY; // position, size and speed of paddle
   
-  Paddle(){ //constructor
+  Paddle(float x, float size){ //constructor
+    positionX = x;
+    high = height/4;
+    positionY = (height/2)-(high/2);
+    wide = size;
+    speedY = 10;
   }
   
   void draw(){ //draw paddle
+    rect(positionX, positionY, wide, high);
   }
   
   void move(float x, float y){ //move paddle
+    if(positionY+(high/2) > y){
+      if(positionY > 0){
+        positionY -= speedY;
+      }
+    }
+    else if(positionY+(high/2) < y){
+      if(positionY+high < height){
+        positionY += speedY;
+      }
+    }
   }
   
   void hit(float ballX, float ballY){ //paddle hit ball
@@ -128,5 +167,9 @@ class Paddle{
   
   float getY(){ //get position y of paddle
     return positionY;
+  }
+  
+  float getHigh(){
+    return high;
   }
 }
