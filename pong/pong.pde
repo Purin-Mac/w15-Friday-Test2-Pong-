@@ -4,7 +4,7 @@ Paddle paddle1, paddle2;
 
 void setup(){
   background(0);
-  size(1000, 1000);
+  size(1000, 800);
   game = new GamePong();
   pongBall = new Pong();
 }
@@ -13,6 +13,8 @@ void draw(){
   background(0);
   game.display();
   pongBall.draw();
+  pongBall.move();
+  pongBall.bounce(pongBall.getX(), pongBall.getY());
 }
 
 class GamePong{
@@ -56,8 +58,13 @@ class Pong{
   Pong(){ //constructor
     positionX = width/2;
     positionY = height/2;
-    speedX = 10;
-    speedY = 10;
+    if(random(0, 1) < 0.5){
+      speedX = -5;
+    }
+    else{
+      speedX = 5;
+    }
+    speedY = random(-3, 3);
     size = 50;
   }
   
@@ -66,9 +73,23 @@ class Pong{
   }
   
   void move(){ //move ball
+    positionX += speedX;
+    positionY += speedY;
   }
   
   void bounce(float x, float y){ //bounce ball when hit wall
+    if(x+size/2 > width){ //right over window
+      speedX = -speedX;
+    }
+    if(x-size/2 < 0){ //left over window
+      speedX = -speedX;
+    }
+    if(y+size/2 > height){ //bottom over window
+      speedY = -speedY;
+    }
+    if(y-size/2 < 0){ //top over window
+      speedY = -speedY;
+    }
   }
   
   float getX(){ //get position x of ball
