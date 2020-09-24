@@ -19,6 +19,8 @@ void draw(){
   pongBall.bounce(pongBall.getX(), pongBall.getY());
   paddle1.draw();
   paddle2.draw();
+  game.setScoreP1(pongBall.scorePlayer1(pongBall.getX(), pongBall.getY(), game.getScoreP1()));
+  game.setScoreP2(pongBall.scorePlayer2(pongBall.getX(), pongBall.getY(), game.getScoreP2()));
   pongBall.setSpeedX(paddle1.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
   pongBall.setSpeedX(paddle2.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
   pongBall.setSpeedY(paddle1.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
@@ -70,10 +72,12 @@ class GamePong{
     return positionY;
   }
   
-  void setScoreP1(){ //set player1 score
+  void setScoreP1(int score){ //set player1 score
+    scoreP1 = score;
   }
   
-  void setScoreP2(){ //set player2 score 
+  void setScoreP2(int score){ //set player2 score
+    scoreP2 = score;
   }
 }
 
@@ -103,24 +107,34 @@ class Pong{
   }
   
   void bounce(float x, float y){ //bounce ball when hit wall
-    if(x+size/2 > width){ //right over window
-      positionX = width/2;
-      positionY = height/2;
-      speedX = -5;
-      speedY = random(-3, 3);
-    }
-    if(x-size/2 < 0){ //left over window
-      positionX = width/2;
-      positionY = height/2;
-      speedX = 5;
-      speedY = random(-3, 3);
-    }
     if(y+size/2 > height){ //bottom over window
       speedY = -speedY;
     }
     if(y-size/2 < 0){ //top over window
       speedY = -speedY;
     }
+  }
+  
+  int scorePlayer1(float x, float y, int score){
+    if(x+size/2 > width){ //right over window
+      positionX = width/2;
+      positionY = height/2;
+      speedX = -5;
+      speedY = 0;
+      score += 1;
+    }
+    return score;
+  }
+    
+  int scorePlayer2(float x, float y, int score){
+    if(x-size/2 < 0){ //left over window
+      positionX = width/2;
+      positionY = height/2;
+      speedX = 5;
+      speedY = 0;
+      score += 1;
+    }
+    return score;
   }
   
   float getX(){ //get position x of ball
