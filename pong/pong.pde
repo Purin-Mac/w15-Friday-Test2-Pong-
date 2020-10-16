@@ -25,6 +25,7 @@ void draw(){
   pongBall.setSpeedX(paddle2.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
   //pongBall.setSpeedY(paddle1.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
   pongBall.setSpeedY(paddle2.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
+  pongBall.reset(pongBall.getX(), pongBall.getY());
 }
 
 void mouseDragged(){
@@ -139,6 +140,15 @@ class Pong{
       score += 1;
     }
     return score;
+  }
+  
+  void reset(float x, float y){
+    if(x-size/2 > width){
+      positionX = width/2;
+      positionY = height/2;
+      speedX = 5;
+      speedY = 0;
+    }
   }
   
   float getX(){ //get position x of ball
