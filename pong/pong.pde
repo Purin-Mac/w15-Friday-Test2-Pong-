@@ -7,7 +7,7 @@ void setup(){
   size(1000, 800);
   game = new GamePong();
   pongBall = new Pong();
-  paddle1 = new Paddle(0, 30);
+  //paddle1 = new Paddle(0, 30);
   paddle2 = new Paddle(width-30, 30);
 }
 
@@ -17,13 +17,13 @@ void draw(){
   pongBall.draw();
   pongBall.move();
   pongBall.bounce(pongBall.getX(), pongBall.getY());
-  paddle1.draw();
+  //paddle1.draw();
   paddle2.draw();
-  game.setScoreP1(pongBall.scorePlayer1(pongBall.getX(), pongBall.getY(), game.getScoreP1()));
-  game.setScoreP2(pongBall.scorePlayer2(pongBall.getX(), pongBall.getY(), game.getScoreP2()));
-  pongBall.setSpeedX(paddle1.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
+  //game.setScoreP1(pongBall.scorePlayer1(pongBall.getX(), pongBall.getY(), game.getScoreP1()));
+  //game.setScoreP2(pongBall.scorePlayer2(pongBall.getX(), pongBall.getY(), game.getScoreP2()));
+  //pongBall.setSpeedX(paddle1.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
   pongBall.setSpeedX(paddle2.hit(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedX()));
-  pongBall.setSpeedY(paddle1.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
+  //pongBall.setSpeedY(paddle1.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
   pongBall.setSpeedY(paddle2.bounce(pongBall.getX(), pongBall.getY(), pongBall.getSize(), pongBall.getSpeedY()));
 }
 
@@ -41,8 +41,8 @@ class GamePong{
   float positionX, positionY, size; //position and size of center line
   
   GamePong(){ //constructor
-    scoreP1 = 0;
-    scoreP2 = 0;
+    //scoreP1 = 0;
+    //scoreP2 = 0;
     size = 10;
     positionX = width/2 - size/2;
     positionY = 0;
@@ -50,10 +50,10 @@ class GamePong{
   
   void display(){ //show score and center line
     fill(255);
-    rect(positionX, positionY, size, height);
+    //rect(positionX, positionY, size, height);
     textSize(50);
-    text(scoreP1, width/4, 50);
-    text(scoreP2, width*3/4, 50);
+    //text(scoreP1, width/4, 50);
+    //text(scoreP2, width*3/4, 50);
   }
   
   int getScoreP1(){ //get player1 score
@@ -87,12 +87,13 @@ class Pong{
   Pong(){ //constructor
     positionX = width/2;
     positionY = height/2;
-    if(random(0, 1) < 0.5){
+    /*if(random(0, 1) < 0.5){
       speedX = -5;
     }
     else{
       speedX = 5;
-    }
+    }*/
+    speedX = 5;
     speedY = 0;
     size = 50;
   }
@@ -113,6 +114,9 @@ class Pong{
     if(y-size/2 < 0){ //top over window
       speedY = -speedY;
     }
+    if(x-size/2 < 0){ //hit left wall
+      speedX = -speedX;
+    } 
   }
   
   int scorePlayer1(float x, float y, int score){
